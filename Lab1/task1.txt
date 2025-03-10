@@ -1,0 +1,9 @@
+mkdir Dokumenty 
+cd Dokumenty/
+mkdir JAZ Przepisy SOP PRI
+ls
+cd Przepisy/
+mkdir Kolacje Obiady Sniadania
+ls
+cd ~
+history >> his_1.txt
