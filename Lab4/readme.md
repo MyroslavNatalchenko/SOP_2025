@@ -68,7 +68,7 @@ kill -CONT 7495
 
 ---
 
-# Zadanie 6 ([Źródło](https://askubuntu.com/questions/1423945/run-script-after-reboot))
+# Zadanie 6 (https://askubuntu.com/questions/1423945/run-script-after-reboot)
 Utwórz skrypt, który automatycznie uruchamia program po starcie systemu. Następnie zrestartuj system i upewnij się, że program uruchamia się automatycznie - wujek google albo prowadzący podpowiedzą, w razie czego.
 
 ```bash
