@@ -8,20 +8,20 @@ Skrypy.sh:
 ```bash
 #!/bin/bash
 
-WALUTA=${1:-USD}
-DATA_OD=${2:-2024-01-01}
-DATA_DO=${3:-2024-12-31}
+Currence=${1:-USD}
+Start=${2:-2024-01-01}
+End=${3:-2024-12-31}
 
-curl -s "http://api.nbp.pl/api/exchangerates/rates/A/$WALUTA/$DATA_OD/$DATA_DO/?format=json" | jq -r '.rates[] | "\(.effectiveDate) \(.mid)"' > dane.txt
+curl -s "http://api.nbp.pl/api/exchangerates/rates/A/$Currence/$Start/$End/?format=json" | jq -r '.rates[] | "\(.effectiveDate) \(.mid)"' > dane.txt
 
 gnuplot -persist <<EOF
 set xdata time
 set timefmt "%Y-%m-%d"
 set format x "%d.%m"
-set title "Kurs $WALUTA do PLN"
+set title "Kurs $Currence do PLN"
 set xlabel "Data"
 set ylabel "Kurs"
 set grid
-plot "dane.txt" using 1:2 with lines title "$WALUTA"
+plot "dane.txt" using 1:2 with lines title "$Currence"
 EOF
 ```
