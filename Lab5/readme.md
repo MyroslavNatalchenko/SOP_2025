@@ -14,7 +14,7 @@ End=${3:-2024-12-31}
 
 curl -s "http://api.nbp.pl/api/exchangerates/rates/A/$Currence/$Start/$End/?format=json" | jq -r '.rates[] | "\(.effectiveDate) \(.mid)"' > dane.txt
 
-gnuplot -persist <<EOF
+gnuplot <<EOF
 set xdata time
 set timefmt "%Y-%m-%d"
 set format x "%d.%m"
