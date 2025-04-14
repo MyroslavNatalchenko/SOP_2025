@@ -126,11 +126,11 @@ int main() {
     pid_t pid1 = fork();
 
     if (pid1 == 0) {
-        printf("Dziecko 1: PID = %d, PPID = %d (Poziom 1)\n", getpid(), getppid());
+        printf("Dziecko 1: PID = %d, PPID = %d\n", getpid(), getppid());
 
         pid_t wnuk1 = fork();
         if (wnuk1 == 0) {
-            printf("Wnuk 1: PID = %d, PPID = %d (Poziom 2)\n", getpid(), getppid());
+            printf("Wnuk 1: PID = %d, PPID = %d\n", getpid(), getppid());
             exit(0);
         } else {
             wait(NULL);
@@ -143,11 +143,11 @@ int main() {
     pid_t pid2 = fork();
 
     if (pid2 == 0) {
-        printf("Dziecko 2: PID = %d, PPID = %d (Poziom 1)\n", getpid(), getppid());
+        printf("Dziecko 2: PID = %d, PPID = %d\n", getpid(), getppid());
 
         pid_t wnuk2 = fork();
         if (wnuk2 == 0) {
-            printf("Wnuk 2: PID = %d, PPID = %d (Poziom 2)\n", getpid(), getppid());
+            printf("Wnuk 2: PID = %d, PPID = %d\n", getpid(), getppid());
             exit(0);
         } else {
             wait(NULL);
