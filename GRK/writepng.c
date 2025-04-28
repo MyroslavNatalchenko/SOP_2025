@@ -19,6 +19,8 @@
 #define HEIGHT 600
 #define COLOR_TYPE PNG_COLOR_TYPE_RGB
 #define BIT_DEPTH 8
+#define TRANSFORM(X) (int)(scale*(X) + dx)
+#define TRANSFORM_Y(Y) (int)(scale*(Y) + dy)
 
 
 void abort_(const char * s, ...)
@@ -194,21 +196,21 @@ void bresenham(int i1, int j1, int i2, int j2,
     else { printf("broken\n");}
 }
 
+void draw_symmetric_pixels(int xc, int yc, int x, int y, png_byte cr, png_byte cg, png_byte cb){
+	write_pixel(xc + x, yc + y, cr, cg, cb);
+	write_pixel(xc - x, yc + y, cr, cg, cb);
+	write_pixel(xc + x, yc - y, cr, cg, cb);
+	write_pixel(xc - x, yc - y, cr, cg, cb);
+	write_pixel(xc + y, yc + x, cr, cg, cb);
+	write_pixel(xc - y, yc + x, cr, cg, cb);
+	write_pixel(xc + y, yc - x, cr, cg, cb);
+	write_pixel(xc - y, yc - x, cr, cg, cb);
+}
+
 void draw_circle(int xc, int yc, int R, png_byte cr, png_byte cg, png_byte cb) {
     int i = 0;
     int j = R;
     int f = 5 - 4 * R;
-
-    void draw_symmetric_pixels(int xc, int yc, int x, int y, png_byte cr, png_byte cg, png_byte cb) {
-        write_pixel(xc + x, yc + y, cr, cg, cb);
-        write_pixel(xc - x, yc + y, cr, cg, cb);
-        write_pixel(xc + x, yc - y, cr, cg, cb);
-        write_pixel(xc - x, yc - y, cr, cg, cb);
-        write_pixel(xc + y, yc + x, cr, cg, cb);
-        write_pixel(xc - y, yc + x, cr, cg, cb);
-        write_pixel(xc + y, yc - x, cr, cg, cb);
-        write_pixel(xc - y, yc - x, cr, cg, cb);
-    }
 
     draw_symmetric_pixels(xc, yc, i, j, cr, cg, cb);
 
@@ -224,25 +226,47 @@ void draw_circle(int xc, int yc, int R, png_byte cr, png_byte cg, png_byte cb) {
     }
 }
 
+void fill_area(int i, int j, png_byte cr, png_byte cg, png_byte cb) {
+	if (i < 0 || i >= width || j < 0 || j >= height) {
+		return;
+	}
+
+	png_byte* row = row_pointers[j];
+	png_byte* ptr = &(row[i*3]);
+
+	if (ptr[0] == 0 && ptr[1] == 0 && ptr[2] == 0) {
+		return;
+	}
+	if (ptr[0] == cr && ptr[1] == cg && ptr[2] == cb) {
+		return;
+	}
+
+	ptr[0] = cr; ptr[1] = cg; ptr[2] = cb;
+
+	fill_area(i + 1, j, cr, cg, cb);
+	fill_area(i - 1, j, cr, cg, cb);
+	fill_area(i, j + 1, cr, cg, cb);
+	fill_area(i, j - 1, cr, cg, cb);
+}
+
 void process_file(void)
 {
-	for (y=0; y<height; y++) {
-		png_byte* row = row_pointers[y];
-		for (x=0; x<width; x++) {
-			png_byte* ptr = &(row[x*3]);
-			ptr[0] = 255;
-			ptr[1] = 255;
+    for (y = 0; y < height; y++) {
+        png_byte* row = row_pointers[y];
+        for (x = 0; x < width; x++) {
+            png_byte* ptr = &(row[x*3]);
+            ptr[0] = 255;
+            ptr[1] = 255;
             ptr[2] = 200;
-		}
-	}
+        }
+    }
 
     float scale = 2;
     int dx = 130;
     int dy = 200;
 
-    // Функция для преобразования координат
-    #define TRANSFORM(X) (int)(scale*(X) + dx)
-    #define TRANSFORM_Y(Y) (int)(scale*(Y) + dy)
+    draw_circle(300, 300, 175, 0, 0, 0);
+    fill_area(300, 300, 0, 255, 0);
 
     bresenham(TRANSFORM(15), TRANSFORM_Y(10), TRANSFORM(15), TRANSFORM_Y(80), 255, 0, 0);
     bresenham(TRANSFORM(15), TRANSFORM_Y(80), TRANSFORM(25), TRANSFORM_Y(80), 255, 0, 0);
@@ -279,7 +303,14 @@ void process_file(void)
     bresenham(TRANSFORM(140), TRANSFORM_Y(80), TRANSFORM(140), TRANSFORM_Y(65), 255, 0, 0);
     bresenham(TRANSFORM(110), TRANSFORM_Y(10), TRANSFORM(140), TRANSFORM_Y(65), 255, 0, 0);
 
-    draw_circle(300,300,200,0,0,0);
+    fill_area(TRANSFORM(17), TRANSFORM_Y(75), 255, 0, 0);
+    fill_area(TRANSFORM(27), TRANSFORM_Y(17), 255, 0, 0);
+    fill_area(TRANSFORM(53), TRANSFORM_Y(32), 255, 0, 0);
+    fill_area(TRANSFORM(78), TRANSFORM_Y(62), 255, 0, 0);
+
+    fill_area(TRANSFORM(104), TRANSFORM_Y(35), 255, 0, 0);
+    fill_area(TRANSFORM(128), TRANSFORM_Y(49), 255, 0, 0);
+    fill_area(TRANSFORM(144), TRANSFORM_Y(45), 255, 0, 0);
 }
 
 
