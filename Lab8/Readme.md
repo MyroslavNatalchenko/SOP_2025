@@ -177,9 +177,9 @@ int main() {
     pid_t pid = fork();
 
     if (pid == 0) {
-        printf("Kid. PID: %d\n", getpid());
+        printf("Kid. PID: %d\n", getppid());
     } else {
-        printf("Parent killed kid. PID: %d\n", pid);
+        printf("Parent killed kid. PID: %d\n", getpid());
         kill(pid, SIGTERM);
     }
     return 0;
