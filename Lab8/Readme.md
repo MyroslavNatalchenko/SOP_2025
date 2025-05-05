@@ -56,7 +56,7 @@ int main() {
     if (strlen(input_buffer) == 5) {
         raise(SIGUSR1);
     } else {
-        FILE *f = fopen("inne.txt", "a");
+        FILE *f = fopen("zad2_other.txt", "a");
         if (f) {
             fprintf(f, "%s\n", input_buffer);
             fclose(f);
@@ -66,7 +66,7 @@ int main() {
 }
 
 void sig_handler(int signum) {
-    FILE *f = fopen("piatki.txt", "a");
+    FILE *f = fopen("zad2_five.txt", "a");
     if (f) {
         fprintf(f, "%s\n", input_buffer);
         fclose(f);
