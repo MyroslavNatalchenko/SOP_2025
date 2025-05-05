@@ -112,7 +112,7 @@ void sig_handler(int signum){
 }
 ```
 
-Uruchomienie i zakończenie:
+Wyłować signal SIGTERM można za pomocą:
 ```bash
 ps aux | grep a.out
 kill -SIGTERM <PID>
@@ -125,7 +125,7 @@ kill -SIGTERM <PID>
 **Treść zadania:**  
 Napisz programik, który będzie się wykonywał w pętli, a w momencie otrzymania SIGUSR1 wydrukuje na terminalu potwierdzenie i zabije się.
 
-**Rozwiązanie:**
+**Rozwiązanie: (ZROBIŁEM tak żeby samodzielnie po 10 sekundach wyłowywał siganl SIGUSR1 dla łatwiejszego testowania)**
 ```c
 #include <stdio.h>
 #include <string.h>
