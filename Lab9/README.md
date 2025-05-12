@@ -1,5 +1,5 @@
 1: 
-``c
+```c
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h> // dla usleep
@@ -23,10 +23,10 @@ int main() {
 
     return 0;
 }
-``
+```
 
 2:
-``c
+```c
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -53,10 +53,10 @@ int main() {
 
     return 0;
 }
-``
+```
 
 3:
-``c
+```c
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -104,4 +104,4 @@ int main() {
 
     return 0;
 }
-``
+```
