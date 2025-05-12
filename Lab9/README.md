@@ -2,12 +2,12 @@
 ```c
 #include <stdio.h>
 #include <pthread.h>
-#include <unistd.h> // dla usleep
+#include <unistd.h> 
 
 void *thread_function(void *arg) {
     while (1) {
         printf("Jestem wątkiem\n");
-        usleep(500000); // 500 ms
+        usleep(500000); 
     }
     return NULL;
 }
@@ -18,7 +18,7 @@ int main() {
 
     while (1) {
         printf("Jestem mainem\n");
-        usleep(2500000); // 2500 ms
+        usleep(2500000); 
     }
 
     return 0;
@@ -34,7 +34,7 @@ int main() {
 void *thread_function(void *arg) {
     for (int i = 0; i < 10; i++) {
         printf("Wątek: %d\n", i);
-        usleep(100000); // 100 ms
+        usleep(100000); 
     }
     return NULL;
 }
@@ -45,7 +45,7 @@ int main() {
 
     for (int i = 0; i < 10; i++) {
         printf("Main: %d\n", i);
-        usleep(150000); // 150 ms
+        usleep(150000); 
     }
 
     pthread_join(thread, NULL);
@@ -65,7 +65,6 @@ int main() {
 
 int counting = 0;
 int counter = 0;
-pthread_t timer_thread;
 
 void *timer_function(void *arg) {
     while (1) {
@@ -79,6 +78,7 @@ void *timer_function(void *arg) {
 }
 
 int main() {
+    pthread_t timer_thread;
     char command[20];
 
     pthread_create(&timer_thread, NULL, timer_function, NULL);
