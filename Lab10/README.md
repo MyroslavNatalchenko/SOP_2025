@@ -55,45 +55,45 @@ Napisz program, który symuluje problem producenta-konsumenta z jednym producent
 #include <semaphore.h>
 #include <pthread.h>
 
-#define BUFFER_SIZE 5
-#define PRODUCE_COUNT 10
+#define BUFFER_AMOUNT_OF_PRODUCTS 5
+#define N_OPERATIONS 10
 
-int buffer[BUFFER_SIZE];
-int in = 0;
-int out = 0;
+int buffer[BUFFER_AMOUNT_OF_PRODUCTS];
+int in=0;
+int out=0;
 
 sem_t sem_empty;
 sem_t sem_full;
 pthread_mutex_t mutex;
 
 void* producer_function(void* arg) {
-    for (int i = 0; i < PRODUCE_COUNT; i++) {
-        int item = rand() % 100;
+    for (int i = 0; i < N_OPERATIONS; i++) {
+        int item = rand()%100;
 
         sem_wait(&sem_empty);
         pthread_mutex_lock(&mutex);
 
         buffer[in] = item;
         printf("PROD: ADD %d TO %d\n", item, in);
-        in = (in + 1)%BUFFER_SIZE;
+        in=(in+1)%BUFFER_AMOUNT_OF_PRODUCTS;
 
         pthread_mutex_unlock(&mutex); 
         sem_post(&sem_full);
 
-        sleep(1);
+        sleep(0.5);
     }
 
     pthread_exit(NULL);
 }
 
 void* consumer_function(void* arg) {
-    for (int i = 0; i < PRODUCE_COUNT; i++) {
+    for (int i = 0; i < N_OPERATIONS; i++) {
         sem_wait(&sem_full);
         pthread_mutex_lock(&mutex);
 
         int item = buffer[out];
         printf("KONS: TAKE %d FROM %d\n", item, out);
-        out = (out + 1)%BUFFER_SIZE;
+        out = (out + 1)%BUFFER_AMOUNT_OF_PRODUCTS;
 
         pthread_mutex_unlock(&mutex);  
         sem_post(&sem_empty);
@@ -107,7 +107,7 @@ void* consumer_function(void* arg) {
 int main() {
     pthread_t producer_thread, consumer_thread;
 
-    if (sem_init(&sem_empty, 0, BUFFER_SIZE) == -1 ||
+    if (sem_init(&sem_empty, 0, BUFFER_AMOUNT_OF_PRODUCTS) == -1 ||
         sem_init(&sem_full, 0, 0) == -1) {
         perror("Nie udało się zainicjować semaforów");
         exit(EXIT_FAILURE);
@@ -156,8 +156,8 @@ Napisz program w języku C, który symuluje problem czytelników i pisarzy. Uży
 #include <semaphore.h>
 #include <pthread.h>
 
-#define NUM_READERS 3
-#define NUM_WRITERS 1
+#define AMOUNT_OF_READERS 3
+#define AMOUNT_OF_WRITERS 1
 
 int shared_data = 0;
 int reader_count = 0;
@@ -176,7 +176,7 @@ void* reader_function(void* arg) {
         }
         sem_post(&reader_count_mutex);
 
-        printf("Czytelnik %d: czyta dane = %d\n", *id, shared_data);
+        printf("READER %d: read = %d\n", *id, shared_data);
         sleep(1);
 
         sem_wait(&reader_count_mutex);
@@ -198,8 +198,8 @@ void* writer_function(void* arg) {
     while (1) {
         sem_wait(&resource_access);
 
-        shared_data += 10;
-        printf("Pisarz %d: pisze dane = %d\n", *id, shared_data);
+        shared_data+=10;
+        printf("WRITE %d: wrote to file = +%d\n", *id, shared_data);
         sleep(2);
 
         sem_post(&resource_access);
@@ -210,10 +210,10 @@ void* writer_function(void* arg) {
 }
 
 int main() {
-    pthread_t readers[NUM_READERS];
-    pthread_t writers[NUM_WRITERS];
-    int reader_ids[NUM_READERS];
-    int writer_ids[NUM_WRITERS];
+    pthread_t readers[AMOUNT_OF_READERS];
+    pthread_t writers[AMOUNT_OF_WRITERS];
+    int reader_ids[AMOUNT_OF_READERS];
+    int writer_ids[AMOUNT_OF_WRITERS];
 
     if (sem_init(&resource_access, 0, 1) == -1 ||
         sem_init(&reader_count_mutex, 0, 1) == -1) {
@@ -221,7 +221,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i < NUM_READERS; i++) {
+    for (int i=0; i<AMOUNT_OF_READERS; i++) {
         reader_ids[i] = i;
         if (pthread_create(&readers[i], NULL, reader_function, &reader_ids[i]) != 0) {
             perror("Błąd przy tworzeniu wątku czytelnika");
@@ -229,7 +229,7 @@ int main() {
         }
     }
 
-    for (int i = 0; i < NUM_WRITERS; i++) {
+    for (int i=0; i<AMOUNT_OF_READERS; i++) {
         writer_ids[i] = i;
         if (pthread_create(&writers[i], NULL, writer_function, &writer_ids[i]) != 0) {
             perror("Błąd przy tworzeniu wątku pisarza");
@@ -237,11 +237,11 @@ int main() {
         }
     }
 
-    for (int i = 0; i < NUM_READERS; i++) {
+    for (int i=0; i<AMOUNT_OF_READERS; i++) {
         pthread_join(readers[i], NULL);
     }
 
-    for (int i = 0; i < NUM_WRITERS; i++) {
+    for (int i=0; i<AMOUNT_OF_READERS; i++) {
         pthread_join(writers[i], NULL);
     }
 
