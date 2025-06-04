@@ -1,0 +1,15 @@
+#include <Servo.h>
+Servo myservo;
+int val = 0;
+
+
+void setup() {
+  myservo.attach(3);
+
+}
+
+void loop() {
+  val = analogRead(A0);
+  int degree = map(val, 0, 1023, 0, 180);
+  myservo.write(degree);
+}
